@@ -1,7 +1,9 @@
 module.exports = {
     create: ( req, res, next ) => {
         const dbInst = req.app.get('db');  // An instance of the database
-        dbInst.create_product().then( () => {
+        const { name, description, price, imageurl } = req.body;
+
+        dbInst.create_product( [name, description, price, imageurl] ).then( () => {
             res.status(200).send() 
         }).catch( () => { 
             res.status(500).send()
@@ -10,7 +12,7 @@ module.exports = {
     getOne: ( req, res, next ) => {
         const dbInst = req.app.get('db');
 
-        dbInst.read_product().then( product => {
+        dbInst.read_product( [req.params.id] ).then( product => {
             res.status(200).send( product ) 
         }).catch( () => { 
             res.status(500).send()
@@ -28,7 +30,7 @@ module.exports = {
     update: ( req, res, next ) => {
         const dbInst = req.app.get('db');
 
-        dbInst.update_product().then( () => {
+        dbInst.update_product( [req.params.id, req.query.desc] ).then( () => {
             res.status(200).send() 
         }).catch( () => { 
             res.status(500).send()
@@ -37,7 +39,7 @@ module.exports = {
     delete: ( req, res, next ) => {
         const dbInst = req.app.get('db');
 
-        dbInst.delete_product().then( () => {
+        dbInst.delete_product( [req.params.id] ).then( () => {
             res.status(200).send() 
         }).catch( () => { 
             res.status(500).send()
